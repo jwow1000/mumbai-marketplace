@@ -1,0 +1,31 @@
+#the-svg {
+  z-index: 1;
+  position: fixed;
+  top: 0;
+  right: 0;
+  height: 80vh;
+  width: 100vw;
+  /* background-color: red; */
+}
+
+#the-svg-bg {
+  z-index: 1;
+  position: fixed;
+  top: 0;
+  right: 0;
+  height: 80vh;
+  width: 100vw;
+}
+
+#overlay #boat-owners:hover {
+  fill: red;
+}
+
+svg {
+  fill: rgba(0, 0, 0, 0);
+  stroke-miterlimit: 10;
+  stroke: black;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: .65px;
+}
