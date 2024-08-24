@@ -1,6 +1,18 @@
+body {
+  margin: 0;
+  padding: 0;
+}
+
+#svg-container {
+  position: relative;
+  width: 100vw; 
+  height: 40rem;
+}
+
 #overlay {
+  object-fit: contain;
   z-index: 1;
-  position: fixed;
+  position: absolute;
   top: 0;
   right: 0;
   height: 100%;
@@ -9,12 +21,30 @@
 }
 
 #the-svg-bg {
+  object-fit: contain;
   z-index: 1;
-  position: fixed;
+  position: absolute;
   top: 0;
   right: 0;
   height: 100%;
   width: 100%;
+}
+
+#blur-overlay {
+  object-fit: contain;
+  z-index: 100; 
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  /* Apply the SVG mask */
+  mask: url(#mask-boat-owners);
+  
+  
+  /* Apply the blur effect to the backdrop */
+  backdrop-filter: blur(2px);
+  background-color: red;
+  /* Ensure the overlay doesn't block interactions */
+  pointer-events: none;
 }
 
 #overlay #boat-owners:hover {
@@ -28,24 +58,4 @@ svg {
   stroke-linecap: round;
   stroke-linejoin: round;
   stroke-width: .65px;
-}
-
-#blur-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 100;
-  /* Apply the SVG mask */
-  mask: url(#mask-boat-owners);
-  mask-size: cover;
- 
-  -webkit-mask: url(#mask-boat-owners) no-repeat center;
-  -webkit-mask-size: cover;
-  
-  /* Apply the blur effect to the backdrop */
-  backdrop-filter: blur(2px);
-  /* Ensure the overlay doesn't block interactions */
-  pointer-events: none;
 }
