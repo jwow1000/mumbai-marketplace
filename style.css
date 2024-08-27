@@ -24,6 +24,7 @@ body {
 .svg-blur-image {
   opacity: 0;
   transition: opacity 1s ease-in-out 0.2s;
+  /* fill: green; */
 }
 
 #the-svg-bg {
