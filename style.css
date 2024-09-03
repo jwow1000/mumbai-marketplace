@@ -9,7 +9,7 @@ body {
   height: 40rem;
 }
 
-#overlay {
+#overlay-item {
   object-fit: contain;
   z-index: 2;
   position: absolute;
