@@ -17,8 +17,6 @@ d3.xml( overlay )
     // console.log("the webflow container", svgContainer);
     svgContainer.appendChild( svg );
     
-    
-    
   })
   
   .then( data => {
