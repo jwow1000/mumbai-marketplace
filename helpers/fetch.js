@@ -1,20 +1,27 @@
 export function getInfo() {
+  
   // get the cms data from the webflow page collections item
-  const infoScripts = document.querySelectorAll('.info-item');
-  console.log("i", infoScripts);
+  const infoItems = document.querySelectorAll('.cms-body-text');
+  console.log("i", infoItems);
   
   // Initialize an array to hold all the stories
   const allInfo = [];
 
   // Loop through each script tag and parse the JSON data
-  infoScripts.forEach( script => {
-    // console.log( script.textContent);
-    const storyData = JSON.parse( script.textContent );
+  infoItems.forEach( item => {
+    // make an object with the data
+    const obj = {
+      title: item.getAttribute('data-title'),
+      body: item.getAttribute('data-body'),
+      tags: item.getAttribute('data-tags'),
+      idMatch: item.getAttribute('data-idMatch'),
+    } 
     
-    allInfo.push( storyData );
+    // add the object to the allInfo array
+    allInfo.push( obj );
   });
 
-
+  // return the array
   return allInfo
 }
 

@@ -3,8 +3,10 @@ import * as d3 from 'd3';
 
 const overlay = 'https://cdn.prod.website-files.com/66e5c9799b48938aa3491deb/66e9c9b2c190241c1455b6de_interact.svg';
 
-// get the card from the DOM
+// get the card items from the DOM
 const card = document.querySelector(".info-card-mplace");
+const cardTitle = card.children[0];
+const cardBody = card.children[1];
 
 d3.xml( overlay )
   .then(data => {
@@ -60,8 +62,9 @@ d3.xml( overlay )
         });
 
         // make the card visible
-        card.style.display = "block"
-        card.innerText = element.body;
+        card.style.display = "flex"
+        cardTitle.innerText = element.title;
+        cardBody.innerText = element.body
       });
       
       match.addEventListener("mouseout", () => {
