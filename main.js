@@ -1,7 +1,7 @@
 import { getInfo } from "./helpers/fetch";
 import * as d3 from 'd3';
 
-const overlay = 'https://cdn.prod.website-files.com/66c4bc9a1e606660c92d9d24/66d5b8ff4aaadc8d13ce8c78_interact.svg';
+const overlay = 'https://cdn.prod.website-files.com/66e5c9799b48938aa3491deb/66e9c9b2c190241c1455b6de_interact.svg';
 
 // get the card from the DOM
 const card = document.querySelector(".info-card-mplace");
@@ -48,13 +48,15 @@ d3.xml( overlay )
         
         // get the id and replace the mask url
         blurLayer.forEach((e) => {
-          // console.log("hmmm",`url(#${match.id})` )
           e.setAttribute('mask', `url(#mask-${match.id})`);
         });
         
         // make the blur layer visible, with an ease animation in css
         blurLayer.forEach((e) => {
           e.style.opacity = "100";
+          match.style.strokeWidth = "5px";
+          match.style.stroke = "rgb(255,0,0,0.1)";
+        
         });
 
         // make the card visible
@@ -68,6 +70,7 @@ d3.xml( overlay )
         // make the blur layer dissapear with an eas out in css
         blurLayer.forEach((e) => {
           e.style.opacity = "0";
+          match.style.stroke = "rgb(255,0,0,0)";
         });
 
         card.style.display = "none";
