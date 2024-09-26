@@ -8,6 +8,9 @@ const card = document.querySelector(".info-card-mplace");
 const cardTitle = card.children[0];
 const cardBody = card.children[1];
 
+// variables
+let cardHoverState = "";
+
 d3.xml( overlay )
   .then(data => {
     const svg = data.documentElement;
@@ -40,31 +43,34 @@ d3.xml( overlay )
     // detect when mouse is over item
     info.forEach( ( element ) => {
       // match the button to the info id
-      console.log("buttins", buttons)
       const match = buttons.find((e) => e.id === element.idMatch);
       
-      console.log("match it: ", match);
+      // add mouseover event to the buttons
+      match.addEventListener("mouseover", ( event ) => {
+        console.log("event target", match.id)
+        if( match.id !== cardHoverState ) {
 
-      match.addEventListener("mouseover", () => {
-        // console.log(`mouse over: ${element.id} `);
-        
-        // get the id and replace the mask url
-        blurLayer.forEach((e) => {
-          e.setAttribute('mask', `url(#mask-${match.id})`);
-        });
-        
-        // make the blur layer visible, with an ease animation in css
-        blurLayer.forEach((e) => {
-          e.style.opacity = "100";
-          match.style.strokeWidth = "5px";
-          match.style.stroke = "rgb(255,0,0,0.1)";
-        
-        });
-
-        // make the card visible
-        card.style.display = "flex"
-        cardTitle.innerText = element.title;
-        cardBody.innerText = element.body
+          // get the id and replace the mask url
+          blurLayer.forEach((e) => {
+            e.setAttribute('mask', `url(#mask-${match.id})`);
+          });
+          
+          // make the blur layer visible, with an ease animation in css
+          blurLayer.forEach((e) => {
+            e.style.opacity = "100";
+            match.style.strokeWidth = "5px";
+            match.style.stroke = "rgb(255,0,0,0.1)";
+          
+          });
+  
+          // make the card visible
+          card.style.opacity = "100";
+          card.style.top = `${event.y - 50}px`;
+          card.style.left = `${event.x - 50}px`;
+          cardTitle.innerText = element.title;
+          cardBody.innerText = element.body
+        }
+        cardHoverState = match.id;
       });
       
       match.addEventListener("mouseout", () => {
@@ -76,7 +82,9 @@ d3.xml( overlay )
           match.style.stroke = "rgb(255,0,0,0)";
         });
 
-        card.style.display = "none";
+        card.style.opacity = "0";
+
+        cardHoverState = "";
       }); 
     });
     
