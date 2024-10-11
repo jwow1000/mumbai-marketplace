@@ -10,6 +10,8 @@ const cardBody = card.children[1];
 
 // variables
 let cardHoverState = "";
+// Detect if the device supports touch (mobile/tablet)
+const isTouchDevice = 'ontouchstart' in document.documentElement;
 
 d3.xml( overlay )
   .then(data => {
@@ -46,7 +48,9 @@ d3.xml( overlay )
       const match = buttons.find((e) => e.id === element.idMatch);
       
       // add mouseover event to the buttons
-      match.addEventListener("mouseover", ( event ) => {
+      const hoverOr = isTouchDevice ? "onclick" : "mouseover";
+
+      match.addEventListener( hoverOr, ( event ) => {
         console.log("event target", match.id)
         if( match.id !== cardHoverState ) {
 
