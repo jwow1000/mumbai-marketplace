@@ -7,7 +7,7 @@ const bgPng = 'https://cdn.prod.website-files.com/66e5c9799b48938aa3491deb/66e9c
 // get the card items from the DOM
 const card = document.querySelector(".info-card-mplace");
 const cardTitle = card.children[0];
-const cardBody = card.children[1];
+// const cardBody = card.children[1];
 
 // variables
 let cardHoverState = "";
@@ -56,9 +56,12 @@ d3.xml( overlay )
       // match the button to the info id
       const match = buttons.find((e) => e.id === element.idMatch);
       
+      // add a state data attribute, 0 none. 1 hovered, 2 details
+      match.setAttribute('data-state', 0);
+
       // add mouseover event to the buttons
       const hoverOr = isTouchDevice ? "onclick" : "mouseover";
-
+      
       match.addEventListener( hoverOr, ( event ) => {
         console.log("event target", match.id)
         if( match.id !== cardHoverState ) {
@@ -78,10 +81,12 @@ d3.xml( overlay )
   
           // make the card visible
           card.style.opacity = "100";
-          card.style.top = `${event.y - 50}px`;
-          card.style.left = `${event.x - 50}px`;
+          card.style.top = `${event.y}px`;
+          card.style.left = `${event.x}px`;
           cardTitle.innerText = element.title;
-          cardBody.innerText = element.body
+          
+          // update state
+          match.setAttribute('data-state', 1);
         }
         cardHoverState = match.id;
       });
@@ -98,7 +103,17 @@ d3.xml( overlay )
         card.style.opacity = "0";
 
         cardHoverState = "";
+        // update state
+        match.setAttribute('data-state', 0);
       }); 
+
+      match.addEventListener("click", () => {
+        // open the story details, if hover is true
+        const check = match.getAttribute('data-state');
+        if( check === 1 ) {
+          console.log("get the story details", match);
+        }
+      })
     });
     
   }
