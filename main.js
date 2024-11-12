@@ -1,7 +1,8 @@
 import { getInfo } from "./helpers/fetch";
 import * as d3 from 'd3';
 
-const overlay = 'https://cdn.prod.website-files.com/66e5c9799b48938aa3491deb/66e9c9b2c190241c1455b6de_interact.svg';
+const overlay = 'https://cdn.prod.website-files.com/66e5c9799b48938aa3491deb/6733d2420789cc2da6969020_interact.svg';
+const bgPng = 'https://cdn.prod.website-files.com/66e5c9799b48938aa3491deb/66e9c54c991f31f33b894e29_new-bg.png';
 
 // get the card items from the DOM
 const card = document.querySelector(".info-card-mplace");
@@ -16,18 +17,26 @@ const isTouchDevice = 'ontouchstart' in document.documentElement;
 d3.xml( overlay )
   .then(data => {
     const svg = data.documentElement;
-    svg.id = "overlay-item"; // Assign an ID or any attributes you need
-    
-    // add the svg to the DOM
+    svg.id = "overlay-item"; // Assign an ID 
+    // Select the SVG element using D3 to use D3 methods
+    const d3Svg = d3.select(svg); 
+    // add the svg and the png baackground to the DOM
+    d3Svg.insert("image", ":first-child")
+      .attr("href", bgPng)
+      .attr("x", 0)                   
+      .attr("y", 0)                   
+      .attr("width", 1489.09)           
+      .attr("height", 1046.52);       
+
     const svgContainer = document.querySelector(".svg-container-mplace");
-    
-    // console.log("the webflow container", svgContainer);
     svgContainer.appendChild( svg );
     
   })
   
   .then( data => {
+    // get the added svg
     const svg = document.body.querySelector("#overlay-item");
+    // svg.preserveAspectRatio = "xMidYMid slice";
 
     // get the info
     const info = getInfo();

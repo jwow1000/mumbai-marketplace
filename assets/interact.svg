@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg id="overlay" viewBox="0 0 1489.09 1046.52" version="1.1" xmlns="http://www.w3.org/2000/svg"
-  xmlns:xlink="http://www.w3.org/1999/xlink">
+<svg id="overlay" viewBox="0 0 1489.09 1046.52" preserveAspectRatio="xMidYMid slice" version="1.1"
+  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
   <style>
     .useOutline {
       fill: black;
