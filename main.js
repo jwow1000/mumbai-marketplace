@@ -11,6 +11,7 @@ const cardTitle = card.children[0];
 
 // variables
 let cardHoverState = "";
+
 // Detect if the device supports touch (mobile/tablet)
 const isTouchDevice = 'ontouchstart' in document.documentElement;
 
@@ -93,7 +94,6 @@ d3.xml( overlay )
       // clone and add the mask
       mask.append( () => match.cloneNode(true) )          // Clone the group
         .attr("fill", "black")                        // Set fill to black
-        .attr("stroke-width", 50)
 
       // add a state data attribute, 0 none. 1 hovered, 2 details
       match.setAttribute('data-state', 0);
@@ -102,8 +102,10 @@ d3.xml( overlay )
       const hoverOr = isTouchDevice ? "onclick" : "mouseover";
       
       match.addEventListener( hoverOr, ( event ) => {
+        const state =  match.getAttribute('data-state');
+        console.log("data state get", state )
         if( match.id !== cardHoverState ) {
-          console.log("event target", match.id)
+          console.log("event target", match.id, cardHoverState)
           blurLayer.attr("mask", "");
           blurLayer
             .attr("mask", `url(#${match.id}_mask)`)
@@ -111,14 +113,15 @@ d3.xml( overlay )
           
           // make the card visible
           card.style.opacity = "100";
-          card.style.top = `${event.y}px`;
-          card.style.left = `${event.x}px`;
+          
           cardTitle.innerText = element.title;
           
           // update state
           match.setAttribute('data-state', 1);
         }
+        
         cardHoverState = match.id;
+        console.log("cardhoverstate is set?: ", cardHoverState)
       });
       
       match.addEventListener("mouseout", () => {
