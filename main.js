@@ -4,13 +4,20 @@ import * as d3 from 'd3';
 const overlay = 'https://cdn.prod.website-files.com/66e5c9799b48938aa3491deb/6735469de4922c58f5af63b3_mplace-buttons.svg';
 const bgPng = 'https://cdn.prod.website-files.com/66e5c9799b48938aa3491deb/67354a2d1d2f1e50c965337b_mplace-background.png'
 
-// get the card items from the DOM
+// select the card items from the DOM
 const card = document.querySelector(".info-card-mplace");
+// select the title
 const cardTitle = card.children[0];
-// const cardBody = card.children[1];
+// select the full-story item
+const fullStory = document.querySelector(".full-story");
+// select the full story title, body-text, and picture container
+const fullStoryTitle = fullStory.querySelector('.full-title');
+const fullStoryBody = fullStory.querySelector('.full-body-text');
+const fullStoryImgs = fullStory.querySelector('.full-img-container');
 
-// variables
-let cardHoverState = "";
+
+// card hover state: 0 = hover off, 1 = hovering, 2 = full-story mode
+let cardHoverState = 0; 
 
 // Detect if the device supports touch (mobile/tablet)
 const isTouchDevice = 'ontouchstart' in document.documentElement;
@@ -23,7 +30,6 @@ d3.xml( overlay )
     
     // Select the SVG element using D3 to use D3 methods
     const d3Svg = d3.select(svg);
-
 
     d3Svg.append("rect")
       .attr("x", 0)
@@ -72,7 +78,6 @@ d3.xml( overlay )
     info.forEach( ( element ) => {
       // match the button to the info id
       const match = theGroups.find((e) => e.id === element.idMatch);
-      console.log("look at the match: ", match)
 
       // make a mask for the match
       // Create a <defs> section if it doesn't already exist
@@ -95,56 +100,78 @@ d3.xml( overlay )
       mask.append( () => match.cloneNode(true) )          // Clone the group
         .attr("fill", "black")                        // Set fill to black
 
-      // add a state data attribute, 0 none. 1 hovered, 2 details
-      match.setAttribute('data-state', 0);
 
       // add mouseover event to the buttons
       const hoverOr = isTouchDevice ? "onclick" : "mouseover";
       
       match.addEventListener( hoverOr, ( event ) => {
-        const state =  match.getAttribute('data-state');
-        console.log("data state get", state )
-        if( match.id !== cardHoverState ) {
-          console.log("event target", match.id, cardHoverState)
-          blurLayer.attr("mask", "");
+        console.log("hover state: ", cardHoverState)
+        if( cardHoverState === 0 ) {
+          
           blurLayer
             .attr("mask", `url(#${match.id}_mask)`)
-            .style("opacity", 0.8)
+            .style("opacity", 0.8);
           
           // make the card visible
+          cardTitle.innerText = element.title;
           card.style.opacity = "100";
           
-          cardTitle.innerText = element.title;
-          
-          // update state
-          match.setAttribute('data-state', 1);
+          // set the global state
+          cardHoverState = 1;
         }
         
-        cardHoverState = match.id;
-        console.log("cardhoverstate is set?: ", cardHoverState)
       });
       
       match.addEventListener("mouseout", () => {
-        console.log(`mouse off: ${match.id}`);
         // Hide the blur layer and reset the stroke and opacity
         blurLayer
           .style("opacity", 0)
 
         card.style.opacity = "0";
 
-        cardHoverState = "";
-        // Update state
-        match.setAttribute('data-state', 0);
-      }); 
+        // set the global state
+        if( cardHoverState === 1 ) {
 
-      match.addEventListener("click", () => {
-        // open the story details, if hover is true
-        const check = match.getAttribute('data-state');
-        if( check === 1 ) {
-          console.log("get the story details", match);
+          cardHoverState = 0;
         }
+        
+      });
+      
+      match.addEventListener("click", () => {
+        
+        if( cardHoverState === 1 ) {
+          // set the global state
+          cardHoverState = 2;
+          
+          // open the full story
+          fullStoryTitle.innerText = element.title;
+          fullStoryBody.innerText = element.body;
+          
+          // make an img element
+          if( element.img ) {
+            console.log("render an image")
+            const image = document.createElement('img');
+            image.src = element.img;
+            fullStoryImgs.appendChild( image );
+
+          }
+          fullStory.style.mouseEvents = "auto";          
+          fullStory.style.display = "block";
+          
+        }
+        
       })
     });
+
+    // add event listener to close full-story on click
+    fullStory.addEventListener("click", (event) => {
+      console.log("firer", cardHoverState)
+      if( cardHoverState === 2 ) {
+        fullStory.style.mouseEvents = "none"; 
+        fullStory.style.display = "none";
+        cardHoverState = 0;
+      }
+    })
     
   }
 
