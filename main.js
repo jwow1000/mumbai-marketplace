@@ -1,8 +1,8 @@
 import { getInfo } from "./helpers/fetch";
 import * as d3 from 'd3';
 
-const overlay = 'https://cdn.prod.website-files.com/66e5c9799b48938aa3491deb/6733d2420789cc2da6969020_interact.svg';
-const bgPng = 'https://cdn.prod.website-files.com/66e5c9799b48938aa3491deb/66e9c54c991f31f33b894e29_new-bg.png';
+const overlay = 'https://cdn.prod.website-files.com/66e5c9799b48938aa3491deb/6735469de4922c58f5af63b3_mplace-buttons.svg';
+const bgPng = 'https://cdn.prod.website-files.com/66e5c9799b48938aa3491deb/67354a2d1d2f1e50c965337b_mplace-background.png'
 
 // get the card items from the DOM
 const card = document.querySelector(".info-card-mplace");
@@ -16,46 +16,85 @@ const isTouchDevice = 'ontouchstart' in document.documentElement;
 
 d3.xml( overlay )
   .then(data => {
+    // Get the root SVG element from the loaded file
     const svg = data.documentElement;
-    svg.id = "overlay-item"; // Assign an ID 
-    // Select the SVG element using D3 to use D3 methods
-    const d3Svg = d3.select(svg); 
-    // add the svg and the png baackground to the DOM
-    d3Svg.insert("image", ":first-child")
-      .attr("href", bgPng)
-      .attr("x", 0)                   
-      .attr("y", 0)                   
-      .attr("width", 1489.09)           
-      .attr("height", 1046.52);       
-
-    const svgContainer = document.querySelector(".svg-container-mplace");
-    svgContainer.appendChild( svg );
+    svg.id = "overlay-item"; // Assign an ID for reference
     
+    // Select the SVG element using D3 to use D3 methods
+    const d3Svg = d3.select(svg);
+
+
+    d3Svg.append("rect")
+      .attr("x", 0)
+      .attr("y", 0)
+      .attr("width", "100%")
+      .attr("height", "100%")
+      .attr("fill", "white")
+      .attr("id", "blur" )
+      .attr("opacity", 0)
+
+    // Insert the PNG as an <image> element at the start of the SVG
+    d3Svg.insert("image", ":first-child") // Inserts as the first child
+      .attr("href", bgPng) // Path to your PNG
+      .attr("x", 0)
+      .attr("y", 0)
+      
+      // .attr("transform", "scale(0.95)")
+      .attr("width", "100%")
+      .attr("height", "100%");
+    
+      // Append the SVG to the DOM
+    const svgContainer = document.querySelector(".svg-container-mplace");
+
+    svgContainer.appendChild(svg);
   })
   
   .then( data => {
-    // get the added svg
-    const svg = document.body.querySelector("#overlay-item");
-    // svg.preserveAspectRatio = "xMidYMid slice";
-
+    // select the added svg
+    const d3Svg = d3.select('#overlay-item');
+    
+    // select all the groups in the overlay
+    const theGroups = d3Svg.selectAll('g').nodes();
+    
     // get the info
     const info = getInfo();
     console.log("chweck it out: ", info);
-
+    
     // get the buttons
-    const buttonsDom = svg.querySelectorAll(".button");
-    const buttons = [...buttonsDom];
+    console.log("the buttons: ", theGroups)
 
     // get the blur image
-    const blurLayer = svg.querySelectorAll(".svg-blur-image");
-    // console.log("buttons", blurLayer)
+    const blurLayer = d3.select("#blur");
     
     // then add the event listeners
     // detect when mouse is over item
     info.forEach( ( element ) => {
       // match the button to the info id
-      const match = buttons.find((e) => e.id === element.idMatch);
+      const match = theGroups.find((e) => e.id === element.idMatch);
+      console.log("look at the match: ", match)
+
+      // make a mask for the match
+      // Create a <defs> section if it doesn't already exist
+      let defs = d3Svg.select("defs");
+      if (defs.empty()) {
+        defs = svg.append("defs");
+      }
+      // make a mask element, add an id
+      const mask = defs.append("mask")
+        .attr("id", `${match.id}_mask`);
+        
+      // Append a white rectangle (the mask background) to cover the entire SVG area
+      mask.append("rect")
+        .attr("width", "100%")
+        .attr("height", "100%")
+        .attr("fill", "white")
+        
       
+      // clone and add the mask
+      mask.append( () => match.cloneNode(true) )          // Clone the group
+        .attr("fill", "black")                        // Set fill to black
+        .attr("stroke-width", 50)
+
       // add a state data attribute, 0 none. 1 hovered, 2 details
       match.setAttribute('data-state', 0);
 
@@ -63,22 +102,13 @@ d3.xml( overlay )
       const hoverOr = isTouchDevice ? "onclick" : "mouseover";
       
       match.addEventListener( hoverOr, ( event ) => {
-        console.log("event target", match.id)
         if( match.id !== cardHoverState ) {
-
-          // get the id and replace the mask url
-          blurLayer.forEach((e) => {
-            e.setAttribute('mask', `url(#mask-${match.id})`);
-          });
+          console.log("event target", match.id)
+          blurLayer.attr("mask", "");
+          blurLayer
+            .attr("mask", `url(#${match.id}_mask)`)
+            .style("opacity", 0.8)
           
-          // make the blur layer visible, with an ease animation in css
-          blurLayer.forEach((e) => {
-            e.style.opacity = "100";
-            match.style.strokeWidth = "5px";
-            match.style.stroke = "rgb(255,0,0,0.1)";
-          
-          });
-  
           // make the card visible
           card.style.opacity = "100";
           card.style.top = `${event.y}px`;
@@ -92,18 +122,15 @@ d3.xml( overlay )
       });
       
       match.addEventListener("mouseout", () => {
-        // console.log(`mouse off: ${match.id}`);
-        
-        // make the blur layer dissapear with an eas out in css
-        blurLayer.forEach((e) => {
-          e.style.opacity = "0";
-          match.style.stroke = "rgb(255,0,0,0)";
-        });
+        console.log(`mouse off: ${match.id}`);
+        // Hide the blur layer and reset the stroke and opacity
+        blurLayer
+          .style("opacity", 0)
 
         card.style.opacity = "0";
 
         cardHoverState = "";
-        // update state
+        // Update state
         match.setAttribute('data-state', 0);
       }); 
 
