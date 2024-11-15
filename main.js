@@ -102,7 +102,7 @@ d3.xml( overlay )
       // add mouseover event to the buttons
       // if touch device use a click state, if not use mousein/mouseout 
       
-      match.addEventListener( "pointerenter", ( event ) => {
+      match.addEventListener( "pointerover", ( event ) => {
         console.log("hover state: ", cardHoverState)
         if( cardHoverState === 0 ) {
           
@@ -120,7 +120,7 @@ d3.xml( overlay )
         
       });
       
-      match.addEventListener("pointerleave", () => {
+      match.addEventListener("pointerout", () => {
         // Hide the blur layer and reset the stroke and opacity
         blurLayer
           .style("opacity", 0)
