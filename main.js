@@ -19,8 +19,6 @@ const fullStoryImgs = fullStory.querySelector('.full-img-container');
 // card hover state: 0 = hover off, 1 = hovering, 2 = full-story mode
 let cardHoverState = 0; 
 
-// Detect if the device supports touch (mobile/tablet)
-const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
 
 d3.xml( overlay )
   .then(data => {
@@ -36,7 +34,7 @@ d3.xml( overlay )
       .attr("y", 0)
       .attr("width", "100%")
       .attr("height", "100%")
-      .attr("fill", "white")
+      .attr("fill", "black")
       .attr("id", "blur" )
       .attr("opacity", 0)
 
