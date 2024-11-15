@@ -20,7 +20,7 @@ const fullStoryImgs = fullStory.querySelector('.full-img-container');
 let cardHoverState = 0; 
 
 // Detect if the device supports touch (mobile/tablet)
-const isTouchDevice = 'ontouchstart' in document.documentElement;
+const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
 
 d3.xml( overlay )
   .then(data => {
@@ -102,9 +102,9 @@ d3.xml( overlay )
 
 
       // add mouseover event to the buttons
-      const hoverOr = isTouchDevice ? "onclick" : "mouseover";
+      // if touch device use a click state, if not use mousein/mouseout 
       
-      match.addEventListener( hoverOr, ( event ) => {
+      match.addEventListener( "pointerenter", ( event ) => {
         console.log("hover state: ", cardHoverState)
         if( cardHoverState === 0 ) {
           
@@ -122,7 +122,7 @@ d3.xml( overlay )
         
       });
       
-      match.addEventListener("mouseout", () => {
+      match.addEventListener("pointerleave", () => {
         // Hide the blur layer and reset the stroke and opacity
         blurLayer
           .style("opacity", 0)
@@ -137,7 +137,7 @@ d3.xml( overlay )
         
       });
       
-      match.addEventListener("click", () => {
+      match.addEventListener("pointerdown", () => {
         
         if( cardHoverState === 1 ) {
           // set the global state
@@ -152,10 +152,11 @@ d3.xml( overlay )
             console.log("render an image")
             const image = document.createElement('img');
             image.src = element.img;
+            image.className = "dyn-images";
             fullStoryImgs.appendChild( image );
 
           }
-          fullStory.style.mouseEvents = "auto";          
+          fullStory.style.pointerEvents = "auto";          
           fullStory.style.display = "block";
           
         }
@@ -165,13 +166,19 @@ d3.xml( overlay )
 
     // add event listener to close full-story on click
     fullStory.addEventListener("click", (event) => {
-      console.log("firer", cardHoverState)
       if( cardHoverState === 2 ) {
-        fullStory.style.mouseEvents = "none"; 
+        const images = fullStory.querySelectorAll('.dyn-images');
+        const cont = document.querySelector('.full-img-container');
+        // remove the pictures
+        images.forEach((item) => {
+          cont.removeChild( item );
+        });
+
+        fullStory.style.pointerEvents = "none"; 
         fullStory.style.display = "none";
         cardHoverState = 0;
       }
-    })
+    });
     
   }
 
