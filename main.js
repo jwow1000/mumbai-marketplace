@@ -34,7 +34,7 @@ d3.xml( overlay )
       .attr("y", 0)
       .attr("width", "100%")
       .attr("height", "100%")
-      .attr("fill", "black")
+      .attr("fill", "white")
       .attr("id", "blur" )
       .attr("opacity", 0)
 
@@ -135,7 +135,7 @@ d3.xml( overlay )
         
       });
       
-      match.addEventListener("pointerdown", () => {
+      match.addEventListener("pointerup", () => {
         
         if( cardHoverState === 1 ) {
           // set the global state
