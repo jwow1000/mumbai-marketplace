@@ -19,6 +19,8 @@ const fullStoryImgs = fullStory.querySelector('.full-img-container');
 // card hover state: 0 = hover off, 1 = hovering, 2 = full-story mode
 let cardHoverState = 0; 
 
+// detect if a touch device
+const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
 
 d3.xml( overlay )
   .then(data => {
@@ -66,7 +68,7 @@ d3.xml( overlay )
     console.log("chweck it out: ", info);
     
     // get the buttons
-    console.log("the buttons: ", theGroups)
+    // console.log("the buttons: ", theGroups)
 
     // get the blur image
     const blurLayer = d3.select("#blur");
@@ -101,7 +103,12 @@ d3.xml( overlay )
 
       // add mouseover event to the buttons
       // if touch device use a click state, if not use mousein/mouseout 
-      
+      const enter = isTouchDevice ? "pointerdown" : "mouseenter";
+      const leave = isTouchDevice ? "pointerdown" : "mouseenter"; 
+      if( isTouchDevice ) {
+        
+
+      } 
       match.addEventListener( "pointerover", ( event ) => {
         console.log("hover state: ", cardHoverState)
         if( cardHoverState === 0 ) {
@@ -138,6 +145,11 @@ d3.xml( overlay )
       match.addEventListener("pointerup", () => {
         
         if( cardHoverState === 1 ) {
+          // Hide the blur layer and reset the stroke and opacity
+          blurLayer
+            .style("opacity", 0)
+
+          card.style.opacity = "0";
           // set the global state
           cardHoverState = 2;
           
