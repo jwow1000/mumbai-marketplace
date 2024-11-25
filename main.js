@@ -99,14 +99,13 @@ d3.xml( overlay )
 
       // add mouseover event to the buttons
       // if touch device use a click state, if not use mousein/mouseout 
-      const enter = isTouchDevice ? "pointerdown" : "mouseenter";
+      const enter = isTouchDevice ? "click" : "mouseenter";
       const leave = isTouchDevice ? "pointerdown" : "mouseenter"; 
       
       // if not touch device use hover for preview
       if( theMatch ) {
         theMatch
-          .on( "pointerover", function(event) {
-            console.log("hover state: ", cardHoverState)
+          .on( enter, function(event) {
             if( cardHoverState === 0 ) {
               // fade out background
               bg.transition()
@@ -143,8 +142,6 @@ d3.xml( overlay )
           })
           .on( "click", function(event){
             if( cardHoverState === 1 ) {
-           
-  
               card.style.opacity = "0";
               // set the global state
               cardHoverState = 2;
