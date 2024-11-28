@@ -14,7 +14,6 @@ const cardTitle = card.children[0];
 // select the full-story item
 const fullStories = document.querySelectorAll(".full-story");
 const theStory = document.querySelector(`#kala-kolim-story`);
-console.log("selected story: ", theStory)
 
 // card hover state: 0 = hover off, 1 = hovering, 2 = full-story mode
 let cardHoverState = 0; 
@@ -57,13 +56,12 @@ d3.xml( overlay )
   .then( data => {
     // select the added svg
     const d3Svg = d3.select('#overlay-item');
+    
     // select the bgPng
     const bg = d3.select('.bgPng');
-   
 
     // select all the groups in the overlay
     const theGroups = d3Svg.selectAll('g');
-    console.log("thegroups: ", theGroups)
     
     // make all buttons go transparent?
     function fadeOut( exclude ) {
@@ -73,7 +71,6 @@ d3.xml( overlay )
         .duration(1000) 
         .ease(d3.easeLinear) 
         .style("opacity", function(d, i) {
-          console.log("tracey", this, excludeNode)
           // If the element is the one to exclude, keep full opacity
           return this === excludeNode ? 1 : 0.2;
         }); 
@@ -88,8 +85,6 @@ d3.xml( overlay )
     
     // get the info
     const info = getInfo();
-    console.log("chweck it out: ", info);
-    
 
     // then add the event listeners
     // detect when mouse is over item
@@ -98,7 +93,6 @@ d3.xml( overlay )
       const theMatch = theGroups.filter(function () {
         return this.id.toLowerCase() === element.idMatch.toLowerCase();
       });
-      console.log("the match", theMatch); 
 
       // add mouseover event to the buttons
       // if touch device use a click state, if not use mousein/mouseout 
@@ -150,19 +144,11 @@ d3.xml( overlay )
               cardHoverState = 2;
               
               // select the full story
-              const theStory = document.querySelector(`#${element.idMatch}-story`);
-              console.log("selected story: ", theStory)
-              // // make an img element
-              // if( element.img ) {
-              //   console.log("render an image")
-              //   const image = document.createElement('img');
-              //   image.src = element.img;
-              //   image.className = "dyn-images";
-              //   theStory.appendChild( image );
-    
-              // }
-              theStory.style.pointerEvents = "auto";          
-              theStory.style.display = "block";
+              const theStory = document.querySelector(`#${element.selectMatch}`);
+              if( theStory ) {
+                theStory.style.pointerEvents = "auto";          
+                theStory.style.display = "block";
+              }
               
             }
             

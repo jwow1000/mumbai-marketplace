@@ -16,6 +16,7 @@ export function getInfo() {
       tags: item.getAttribute('data-tags'),
       idMatch: item.getAttribute('data-idMatch'),
       img: item.getAttribute('data-img'),
+      selectMatch: item.getAttribute('data-selectMatch'),
     } 
     
     // add the object to the allInfo array
