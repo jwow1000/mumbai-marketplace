@@ -4,7 +4,7 @@ import * as d3 from 'd3';
 
 // this approach makes the background opacity go down and all the other buttons
 
-const overlay = 'https://cdn.prod.website-files.com/66e5c9799b48938aa3491deb/6744e078eed5597e83744500_active-buttons.svg';
+const overlay = 'https://cdn.prod.website-files.com/66e5c9799b48938aa3491deb/67489b1749db02e317ab4fcf_new-active-buttons.svg';
 const bgPng = 'https://cdn.prod.website-files.com/66e5c9799b48938aa3491deb/6744bfe84fa1f18fb167f4dd_static-background.png';
 
 // select the card items from the DOM
@@ -12,18 +12,21 @@ const card = document.querySelector(".info-card-mplace");
 // select the title
 const cardTitle = card.children[0];
 // select the full-story item
-const fullStory = document.querySelector(".full-story");
-// select the full story title, body-text, and picture container
-const fullStoryTitle = fullStory.querySelector('.full-title');
-const fullStoryBody = fullStory.querySelector('.full-body-text');
-const fullStoryImgs = fullStory.querySelector('.full-img-container');
-
+const fullStories = document.querySelectorAll(".full-story");
+const theStory = document.querySelector(`#kala-kolim-story`);
+console.log("selected story: ", theStory)
 
 // card hover state: 0 = hover off, 1 = hovering, 2 = full-story mode
 let cardHoverState = 0; 
 
 // detect if a touch device
 const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+function hideStories() {
+  fullStories.forEach((story) => {
+    story.style.pointerEvents = "none"; 
+    story.style.display = "none";
+  });
+}
 
 d3.xml( overlay )
   .then(data => {
@@ -100,7 +103,7 @@ d3.xml( overlay )
       // add mouseover event to the buttons
       // if touch device use a click state, if not use mousein/mouseout 
       const enter = isTouchDevice ? "click" : "mouseenter";
-      const leave = isTouchDevice ? "pointerdown" : "mouseenter"; 
+      const leave = isTouchDevice ? "click" : "mouseleave"; 
       
       // if not touch device use hover for preview
       if( theMatch ) {
@@ -123,7 +126,7 @@ d3.xml( overlay )
               cardHoverState = 1;
             } 
           })
-          .on( "pointerout", function(event) {
+          .on( leave, function(event) {
             // Hide the blur layer and reset the stroke and opacity
             bg.transition()
               .duration(1000) 
@@ -135,7 +138,6 @@ d3.xml( overlay )
 
             // set the global state
             if( cardHoverState === 1 ) {
-
               cardHoverState = 0;
             }
       
@@ -143,24 +145,24 @@ d3.xml( overlay )
           .on( "click", function(event){
             if( cardHoverState === 1 ) {
               card.style.opacity = "0";
+              
               // set the global state
               cardHoverState = 2;
               
-              // open the full story
-              fullStoryTitle.innerText = element.title;
-              fullStoryBody.innerText = element.body;
-              
-              // make an img element
-              if( element.img ) {
-                console.log("render an image")
-                const image = document.createElement('img');
-                image.src = element.img;
-                image.className = "dyn-images";
-                fullStoryImgs.appendChild( image );
+              // select the full story
+              const theStory = document.querySelector(`#${element.idMatch}-story`);
+              console.log("selected story: ", theStory)
+              // // make an img element
+              // if( element.img ) {
+              //   console.log("render an image")
+              //   const image = document.createElement('img');
+              //   image.src = element.img;
+              //   image.className = "dyn-images";
+              //   theStory.appendChild( image );
     
-              }
-              fullStory.style.pointerEvents = "auto";          
-              fullStory.style.display = "block";
+              // }
+              theStory.style.pointerEvents = "auto";          
+              theStory.style.display = "block";
               
             }
             
@@ -169,20 +171,24 @@ d3.xml( overlay )
       }
     })
     // add event listener to close full-story on click
-    fullStory.addEventListener("click", (event) => {
-      if( cardHoverState === 2 ) {
-        const images = fullStory.querySelectorAll('.dyn-images');
-        const cont = document.querySelector('.full-img-container');
-        // remove the pictures
-        images.forEach((item) => {
-          cont.removeChild( item );
-        });
+    fullStories.forEach((story) => {
+      story.addEventListener("click", (event) => {
+        if( cardHoverState === 2 ) {
+          // const images = document.querySelectorAll('.dyn-images');
+          // const cont = document.querySelector('.full-img-container');
+          // // remove the pictures
+          // images.forEach((item) => {
+          //   cont.removeChild( item );
+          // });
+          // hide the stories
+          hideStories();
+          
+          cardHoverState = 0;
+        }
+      }); 
 
-        fullStory.style.pointerEvents = "none"; 
-        fullStory.style.display = "none";
-        cardHoverState = 0;
-      }
-    }); 
+
+    });
     
   })
 .catch(error => console.error("Error loading the SVG:", error));
