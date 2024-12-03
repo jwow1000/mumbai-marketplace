@@ -5,7 +5,7 @@ import * as d3 from 'd3';
 // this approach makes the background opacity go down and all the other buttons
 
 const overlay = 'https://cdn.prod.website-files.com/66e5c9799b48938aa3491deb/67489b1749db02e317ab4fcf_new-active-buttons.svg';
-const bgPng = 'https://cdn.prod.website-files.com/66e5c9799b48938aa3491deb/6744bfe84fa1f18fb167f4dd_static-background.png';
+const bgPng = 'https://cdn.prod.website-files.com/66e5c9799b48938aa3491deb/674f88456fdef5f3e049f128_market-bg-no-arrows.png';
 
 // select the card items from the DOM
 const card = document.querySelector(".info-card-mplace");
