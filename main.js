@@ -62,7 +62,8 @@ d3.xml( overlay )
 
     // select all the groups in the overlay
     const theGroups = d3Svg.selectAll('g');
-    
+    console.log("the groups", theGroups);
+
     // make all buttons go transparent?
     function fadeOut( exclude ) {
       const excludeNode = exclude.node();
@@ -80,7 +81,14 @@ d3.xml( overlay )
       theGroups.transition()
         .duration(1000) 
         .ease(d3.easeLinear) 
-        .style("opacity", 1); 
+        .style("opacity", function() {
+          if(this.id.includes('towards')) {
+            return 0.2;
+          } else {
+            return 1;
+          }
+          
+        }); 
     }  
     
     // get the info
