@@ -13,7 +13,6 @@ const card = document.querySelector(".info-card-mplace");
 const cardTitle = card.children[0];
 // select the full-story item
 const fullStories = document.querySelectorAll(".full-story");
-const theStory = document.querySelector(`#kala-kolim-story`);
 
 // card hover state: 0 = hover off, 1 = hovering, 2 = full-story mode
 let cardHoverState = 0; 
