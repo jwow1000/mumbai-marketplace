@@ -12,13 +12,15 @@ const card = document.querySelector(".info-card-mplace");
 // select the title
 const cardTitle = card.children[0];
 // select the full-story item
-const fullStories = document.querySelectorAll(".full-story");
+const fullStories = document.querySelectorAll(".market-place-story-grid");
 
 // card hover state: 0 = hover off, 1 = hovering, 2 = full-story mode
 let cardHoverState = 0; 
 
 // detect if a touch device
 const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+
+// hide all the stories
 function hideStories() {
   fullStories.forEach((story) => {
     story.style.pointerEvents = "none"; 
@@ -82,7 +84,7 @@ d3.xml( overlay )
         .ease(d3.easeLinear) 
         .style("opacity", function() {
           if(this.id.includes('towards')) {
-            return 0.2;
+            return 0.1;
           } else {
             return 1;
           }
@@ -92,7 +94,7 @@ d3.xml( overlay )
     
     // get the info
     const info = getInfo();
-
+    console.log("info", info)
     // then add the event listeners
     // detect when mouse is over item
     info.forEach( ( element ) => {
@@ -100,9 +102,11 @@ d3.xml( overlay )
       const theMatch = theGroups.filter(function () {
         return this.id.toLowerCase() === element.idMatch.toLowerCase();
       });
+     
 
       // add mouseover event to the buttons
       // if touch device use a click state, if not use mousein/mouseout 
+      console.log("touch device?: ", isTouchDevice)
       const enter = isTouchDevice ? "click" : "mouseenter";
       const leave = isTouchDevice ? "click" : "mouseleave"; 
       
@@ -128,17 +132,18 @@ d3.xml( overlay )
             } 
           })
           .on( leave, function(event) {
-            // Hide the blur layer and reset the stroke and opacity
-            bg.transition()
+            
+
+            // set the global state
+            if( cardHoverState === 1 ) {
+              // Hide the blur layer and reset the stroke and opacity
+              bg.transition()
               .duration(1000) 
               .ease(d3.easeLinear) 
               .style("opacity", 1); 
             
-            fadeIn();
-            card.style.opacity = "0";
-
-            // set the global state
-            if( cardHoverState === 1 ) {
+              fadeIn();
+              card.style.opacity = "0";
               cardHoverState = 0;
             }
       
@@ -147,22 +152,22 @@ d3.xml( overlay )
             if( cardHoverState === 1 ) {
               card.style.opacity = "0";
               
-              // set the global state
-              cardHoverState = 2;
-              
               // select the full story
-              const theStory = document.querySelector(`#${element.selectMatch}`);
+              const theStory = document.getElementById(`${element.selectMatch}`);
+             
               if( theStory ) {
                 theStory.style.pointerEvents = "auto";          
                 theStory.style.display = "grid";
               }
-              
+              // set the global state
+              cardHoverState = 2; 
             }
             
           })
         
       }
     })
+
     // add event listener to close full-story on click
     fullStories.forEach((story) => {
       story.addEventListener("click", (event) => {
