@@ -154,7 +154,7 @@ d3.xml( overlay )
               const theStory = document.querySelector(`#${element.selectMatch}`);
               if( theStory ) {
                 theStory.style.pointerEvents = "auto";          
-                theStory.style.display = "block";
+                theStory.style.display = "grid";
               }
               
             }
