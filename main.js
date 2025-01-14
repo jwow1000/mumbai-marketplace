@@ -157,7 +157,7 @@ d3.xml( overlay )
              
               if( theStory ) {
                 theStory.style.pointerEvents = "auto";          
-                theStory.style.display = "grid";
+                theStory.style.display = "block";
               }
               // set the global state
               cardHoverState = 2; 
