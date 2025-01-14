@@ -12,7 +12,7 @@ const card = document.querySelector(".info-card-mplace");
 // select the title
 const cardTitle = card.children[0];
 // select the full-story item
-const fullStories = document.querySelectorAll(".  market-place-story-grid");
+const fullStories = document.querySelectorAll(".market-place-story-grid");
 
 // card hover state: 0 = hover off, 1 = hovering, 2 = full-story mode
 let cardHoverState = 0; 
