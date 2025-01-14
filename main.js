@@ -18,7 +18,10 @@ const fullStories = document.querySelectorAll(".market-place-story-grid");
 let cardHoverState = 0; 
 
 // detect if a touch device
-const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+const isTouchDevice = 
+  'ontouchstart' in window || 
+  (navigator.maxTouchPoints > 0 || window.matchMedia("(pointer: coarse)").matches);
+
 
 // hide all the stories
 function hideStories() {
