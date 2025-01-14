@@ -2,7 +2,7 @@ export function getInfo() {
   
   // get the cms data from the webflow page collections item
   const infoItems = document.querySelectorAll('.cms-body-text');
-  console.log("i", infoItems);
+  // console.log("i", infoItems);
   
   // Initialize an array to hold all the stories
   const allInfo = [];
