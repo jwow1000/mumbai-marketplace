@@ -63,7 +63,7 @@ d3.xml( overlay )
 
     // select all the groups in the overlay
     const theGroups = d3Svg.selectAll('g');
-    console.log("the groups", theGroups);
+    // console.log("the groups", theGroups);
 
     // make all buttons go transparent?
     function fadeOut( exclude ) {
@@ -94,7 +94,7 @@ d3.xml( overlay )
     
     // get the info
     const info = getInfo();
-    console.log("info", info)
+    // console.log("info", info)
     // then add the event listeners
     // detect when mouse is over item
     info.forEach( ( element ) => {
@@ -106,7 +106,7 @@ d3.xml( overlay )
 
       // add mouseover event to the buttons
       // if touch device use a click state, if not use mousein/mouseout 
-      console.log("touch device?: ", isTouchDevice)
+      // console.log("touch device?: ", isTouchDevice)
       const enter = isTouchDevice ? "click" : "mouseenter";
       const leave = isTouchDevice ? "click" : "mouseleave"; 
       
