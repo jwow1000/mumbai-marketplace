@@ -160,7 +160,7 @@ d3.xml( overlay )
              
               if( theStory ) {
                 theStory.style.pointerEvents = "auto";          
-                theStory.style.display = "block";
+                theStory.style.display = "flex";
               }
               // set the global state
               cardHoverState = 2; 
