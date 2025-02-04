@@ -190,6 +190,13 @@ d3.xml( overlay )
 
 
     });
+
+    // make it scale
+    d3.select("#overlay-item") // Select the existing SVG
+      .attr("width", "100%") // Make it responsive
+      .attr("height", "100%")
+      .attr("viewBox", "0 0 1920 1080") // Adjust based on original SVG dimensions
+      .attr("preserveAspectRatio", "xMidYMid meet"); // Maintain aspect ratio
     
   })
 .catch(error => console.error("Error loading the SVG:", error));
